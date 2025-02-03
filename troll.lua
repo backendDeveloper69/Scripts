@@ -1,5 +1,3 @@
--- keep in mind, the script is buggy and im not a good lua coder.
-
 local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
 local RunService = game:GetService("RunService")
@@ -97,12 +95,6 @@ local function followPlayer(targetPlayer, localPlayer)
                 end
             end
         end
-
-        local lookAtCFrame = CFrame.new(
-            localPlayer.Character.PrimaryPart.Position,
-            targetPlayer.Character.PrimaryPart.Position
-        )
-        localPlayer.Character:SetPrimaryPartCFrame(lookAtCFrame)
     end)
 end
 
