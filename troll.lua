@@ -1,3 +1,5 @@
+-- keep in mind, the script is buggy and im not a good lua coder.
+
 local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
 local RunService = game:GetService("RunService")
@@ -12,7 +14,6 @@ local running = true
 local cooldownTime = 6
 local currentTargetPlayer = nil
 local followConnection = nil
-
 
 local function checkForUpdates()
     while running do
@@ -31,7 +32,6 @@ local function checkForUpdates()
     end
 end
 
-
 local function chooseRandomPlayer()
     local playerList = Players:GetPlayers()
     if #playerList > 1 then
@@ -44,13 +44,11 @@ local function chooseRandomPlayer()
     return nil
 end
 
-
 local function sendChatMessage(message)
     if TextChatService and TextChatService.ChatInputBarConfiguration then
         TextChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync(message)
     end
 end
-
 
 local function stopFollowingPlayer()
     if followConnection then
@@ -59,7 +57,6 @@ local function stopFollowingPlayer()
     end
     currentTargetPlayer = nil
 end
-
 
 local function followPlayer(targetPlayer, localPlayer)
     if targetPlayer == currentTargetPlayer then
@@ -109,21 +106,18 @@ local function followPlayer(targetPlayer, localPlayer)
     end)
 end
 
-
 local function performAction()
     local chosenPlayer = chooseRandomPlayer()
     if chosenPlayer then
         followPlayer(chosenPlayer, Players.LocalPlayer)
-        local action = math.random(1, 3)
+        local action = math.random(1, 2)
 
         if action == 1 then
-            
             local localPlayer = Players.LocalPlayer
             localPlayer.Character.Humanoid.WalkSpeed = 16
             sendChatMessage("loser")
             wait(2)
 
-            
             local speed = 16
             while speed < 50 and localPlayer.Character and localPlayer.Character.Humanoid.Health > 0 do
                 speed = speed + 2
@@ -132,37 +126,24 @@ local function performAction()
             end
 
         elseif action == 2 then
-            
             local localPlayer = Players.LocalPlayer
             localPlayer.Character.Humanoid.WalkSpeed = 16
 
             wait(2)
 
-            
-            localPlayer.Character.Humanoid:MoveTo(chosenPlayer.Character.HumanoidRootPart.Position + Vector3.new(0, 0, 5))
+            localPlayer.Character.Humanoid:MoveTo(chosenPlayer.Character.HumanoidRootPart.Position)
+            localPlayer.Character.Humanoid.MoveToFinished:Wait()
 
-            local dolphinAnim = Instance.new("Animation")
-            dolphinAnim.AnimationId = "rbxassetid://168738279" 
-            localPlayer.Character.Humanoid:LoadAnimation(dolphinAnim):Play()
-
-            wait(3)
-            sendChatMessage("my cat did that, mb")
-            localPlayer.Character.Humanoid.WalkSpeed = 16
+            sendChatMessage("wait my cat is on my pc")
             wait(2)
 
-        elseif action == 3 then
-           
-            local localPlayer = Players.LocalPlayer
-            localPlayer.Character.Humanoid.WalkSpeed = 16
-
-            local targetPos = chosenPlayer.Character.HumanoidRootPart.Position
-            localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(targetPos + Vector3.new(0, 5, 0))
             local startTime = tick()
-            while tick() - startTime < 10 and localPlayer.Character and localPlayer.Character.Humanoid.Health > 0 do
-                localPlayer.Character:SetPrimaryPartCFrame(CFrame.new(targetPos + Vector3.new(0, 5, 0)) * CFrame.Angles(0, math.rad((tick() - startTime) * 36), 0))
+            while tick() - startTime < 9 and localPlayer.Character and localPlayer.Character.Humanoid.Health > 0 do
+                localPlayer.Character:SetPrimaryPartCFrame(localPlayer.Character.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(36), 0) * CFrame.new(0, 0.5, 0))
                 wait(0.1)
             end
-            sendChatMessage("mb my cat got on")
+
+            localPlayer.Character.Humanoid.Health = 0
         end
     else
         sendChatMessage("No other players found")
