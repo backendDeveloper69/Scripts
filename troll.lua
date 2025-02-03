@@ -102,7 +102,7 @@ local function performAction()
     local chosenPlayer = chooseRandomPlayer()
     if chosenPlayer then
         followPlayer(chosenPlayer, Players.LocalPlayer)
-        local action = math.random(1, 2)
+        local action = math.random(1, 3)
 
         if action == 1 then
             local localPlayer = Players.LocalPlayer
@@ -131,11 +131,29 @@ local function performAction()
 
             local startTime = tick()
             while tick() - startTime < 9 and localPlayer.Character and localPlayer.Character.Humanoid.Health > 0 do
-                localPlayer.Character:SetPrimaryPartCFrame(localPlayer.Character.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(36), 0) * CFrame.new(0, 0.5, 0))
+                localPlayer.Character:SetPrimaryPartCFrame(localPlayer.Character.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(168), 0) * CFrame.new(0, 0.5, 0))
                 wait(0.1)
             end
 
             localPlayer.Character.Humanoid.Health = 0
+
+        elseif action == 3 then
+            local localPlayer = Players.LocalPlayer
+            localPlayer.Character.Humanoid.WalkSpeed = 16
+
+            wait(2)
+
+            localPlayer.Character.Humanoid:MoveTo(chosenPlayer.Character.HumanoidRootPart.Position)
+            localPlayer.Character.Humanoid.MoveToFinished:Wait()
+
+            local targetPos = chosenPlayer.Character.HumanoidRootPart.Position
+            localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(targetPos + Vector3.new(0, 5, 0))
+            local startTime = tick()
+            while tick() - startTime < 10 and localPlayer.Character and localPlayer.Character.Humanoid.Health > 0 do
+                localPlayer.Character:SetPrimaryPartCFrame(CFrame.new(targetPos + Vector3.new(0, 10, 0)) * CFrame.Angles(0, math.rad((tick() - startTime) * 177), 0))
+                wait(0.1)
+            end
+            sendChatMessage("mb my cat got on")
         end
     else
         sendChatMessage("No other players found")
